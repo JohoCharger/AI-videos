@@ -6,6 +6,7 @@ import secrets
 import time
 import json
 import random
+import selectimages
 
 CHATGPT_PROD_KEY = secrets.CHATGPT_PROD_KEY
 LEONARDO_PROD_KEY = secrets.LEONARDO_PROD_KEY
@@ -60,6 +61,8 @@ leonardo_headers = {
 
 leonardo_url = "https://cloud.leonardo.ai/api/rest/v1/generations"
 
+image_list = []
+
 for prompt in prompts:
     leonardo_json = {
         "alchemy": True,
@@ -107,4 +110,7 @@ for prompt in prompts:
         f.write(requests.get(image["url"]).content)
         f.close()
 
-print(prompts)
+        image_list.append({
+            "filename": filename,
+            "caption": prompt["name"]
+        })
