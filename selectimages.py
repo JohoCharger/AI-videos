@@ -1,6 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-import makemovie
+import config
 
 # List of image paths (replace with your image paths)
 image_paths1 = [
@@ -23,7 +23,7 @@ root.title("Image Selector")
 
 # Create image labels
 image_labels = []
-for i in range(3):
+for i in range(config.NUM_IMAGES):
     label = tk.Label(root, width=200, height=512, borderwidth=2, relief="solid")
     label.grid(row=0, column=i, padx=10, pady=10)
     image_labels.append(label)
@@ -33,11 +33,11 @@ def show_images(image_paths):
     global current_index, selected_image
 
     # Clear previous images
-    for i in range(3):
+    for i in range(config.NUM_IMAGES):
         image_labels[i].config(image=None)
 
     # Load and display the next three images
-    for i in range(3):
+    for i in range(config.NUM_IMAGES):
         idx = current_index + i
         if idx < len(image_paths):
             image = Image.open(image_paths[idx]["filename"])
@@ -62,7 +62,7 @@ def choose_image(index, image_paths):
 
 def next_images(image_paths):
     global current_index
-    current_index += 3
+    current_index += config.NUM_IMAGES
     if current_index >= len(image_paths):
         root.quit()
     show_images(image_paths)
@@ -76,5 +76,4 @@ def choose_images(imageList):
 
 if __name__ == "__main__":
     choose_images(image_paths1)
-    makemovie.make_movie(selected_images)
     print(selected_images)

@@ -7,12 +7,12 @@ import time
 import json
 import random
 import selectimages
+import makemovie
+import config
 
 CHATGPT_PROD_KEY = secrets.CHATGPT_PROD_KEY
 LEONARDO_PROD_KEY = secrets.LEONARDO_PROD_KEY
 
-NUM_PROMPTS = 2
-NUM_IMAGES = 3
 
 current_date = datetime.now()
 formatted_date = current_date.strftime('%d-%m-%Y')
@@ -22,28 +22,25 @@ client = OpenAI(
     # This is the default and can be omitted
     api_key=CHATGPT_PROD_KEY
 )
-query = "Mysterious, ancient."
-assistant = "Your job is to give the user " + str(NUM_PROMPTS) +" example prompts for a text-to-image generation AI. The user wants the images to contain only two men and lots of detail and contrast. The user will give you a few adjectives or themes for you to generate the prompts from. The prompts don't need to start with \"Generate an image...\" or anything like that. He will also want a caption for the photo which should describe the two men and be no more than 2 words long, and he will want this format in your response: \n[CAPTION]\n[PROPMPT]"
 
 # Define the messages in the conversation
 messages = [
     {"role": "system",
-     "content": assistant
+     "content": config.ASSISTANT
     },
-    {"role": "user", "content": query}
+    {"role": "user", "content": config.QUERY}
 ]
 chat_completion = client.chat.completions.create(
     messages=messages,
-    model="gpt-4o-mini",
+    model="gpt-4o",
 )
 
-# Print the assistant's reply
 response = chat_completion.choices[0].message.content
 
 tokens = response.split("\n")
 
 prompts = []
-for i in range(NUM_PROMPTS):
+for i in range(config.NUM_PROMPTS):
   name = tokens[i * 3].strip("[] \t\n")
   prompt = tokens[i*3+1]
   prompts.append({
@@ -66,21 +63,19 @@ image_list = []
 for prompt in prompts:
     leonardo_json = {
         "alchemy": True,
-        "height": 1024,
-        "modelId": "e71a1c2f-4f80-4800-934f-2c68979d8cc8",
-        "num_images": NUM_IMAGES,
-        "presetStyle": "ANIME",
+        "height": config.IMAGE_HEIGHT,
+        "modelId": config.MODEL_ID,
+        "num_images": config.NUM_IMAGES,
         "prompt": prompt["prompt"],
-        "width": 576
+        "width": config.IMAGE_WIDTH
     }
     testing_json = {
-        "alchemy": False,
-        "height": 512,
-        "modelId": "e71a1c2f-4f80-4800-934f-2c68979d8cc8",
-        "num_images": NUM_IMAGES,
-        "presetStyle": "ANIME",
+        "alchemy": True,
+        "height": config.IMAGE_HEIGHT,
+        "modelId": config.MODEL_ID,
+        "num_images": config.NUM_IMAGES,
         "prompt": prompt["prompt"],
-        "width": 512
+        "width": config.IMAGE_WIDTH
 
     }
 
@@ -114,3 +109,6 @@ for prompt in prompts:
             "filename": filename,
             "caption": prompt["name"]
         })
+
+selectimages.choose_images(image_list)
+makemovie.make_movie(selectimages.selected_images)
