@@ -111,4 +111,6 @@ for prompt in prompts:
         })
 
 selectimages.choose_images(image_list)
+for image in selectimages.selected_images:
+    print(image["filename"])
 makemovie.make_movie(selectimages.selected_images)

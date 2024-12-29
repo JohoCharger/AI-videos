@@ -1,10 +1,12 @@
 NUM_PROMPTS = 4
 NUM_IMAGES = 3
+INTRO_TEXT = "Which millionaires describe you and bro"
 ASSISTANT = "Your job is to give the user " + str(NUM_PROMPTS) + " example prompts for a text-to-image generation AI. The user wants the images to contain only two men and lots of detail and contrast. The user will give you " + str(NUM_PROMPTS) + " short descriptions of specific themes or scenarios separated by a dot, and you will then generate a prompt for each one. The prompt should start \"Two masculine...\". He will also want a caption for the image which should describe the two men and be no more than 2 words long, and he will want this format in your response:\n[CAPTION]\n[PROPMPT]"
-QUERY = "Wizards cooking a spell in a big cauldron. Ancient warriors in a grassfield. Crazy scientists working on a contraption. Secret agents in a ghetto street."
+QUERY = "Two businessmen in a luxury yatch. Two millionaires dressed like poor guys. Two businessmen in a highrise office in a meeting. Two millionaires in a rusty old cottage."
 MODEL_ID = "ac614f96-1082-45bf-be9d-757f2d31c174"
 IMAGE_WIDTH = 576
 IMAGE_HEIGHT = 1024
 FONT_SIZE = 32
 INTRO_CLIP_DURATION = 1.5
 IMAGE_CLIP_DURATION = 2
+SONG_NAME = "nowyouwontletgo.mp3"

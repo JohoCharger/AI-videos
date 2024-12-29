@@ -28,7 +28,6 @@ image_paths1 = [
 image_paths2 = [
     {"filename": 'images/26-07-2024/Guardians-of-Time6dd27c.jpg', "caption": "Guardians of Time"},
 ]
-audio_path = "song.mp3"
 
 # Video size
 VIDEO_SIZE = (config.IMAGE_WIDTH, config.IMAGE_HEIGHT)
@@ -40,7 +39,7 @@ def make_movie(image_paths):
     black_clip = black_clip.fl_image(lambda pic: custom_resize(pic, VIDEO_SIZE))
     # Create a 5-second black screen with text
     #black_clip = ColorClip(size=VIDEO_SIZE, color=(0, 0, 0), duration=config.INTRO_CLIP_DURATION)
-    text_clip = TextClip("Which duo describes you and bro", fontsize=config.FONT_SIZE, color='white', size=VIDEO_SIZE)
+    text_clip = TextClip(config.INTRO_TEXT, fontsize=config.FONT_SIZE, color='white', size=VIDEO_SIZE)
     text_clip = text_clip.set_duration(config.INTRO_CLIP_DURATION).set_position('center').set_start(0)
     intro_clip = CompositeVideoClip([black_clip, text_clip])
 
@@ -60,7 +59,7 @@ def make_movie(image_paths):
 
     final_clip = final_clip.fl_image(lambda pic: custom_resize(pic, (VIDEO_SIZE[0] * 2, VIDEO_SIZE[1] * 2)))
 
-    audio_clip = AudioFileClip(audio_path)
+    audio_clip = AudioFileClip("audios/" + config.SONG_NAME)
     audio_clip = audio_clip.subclip(0, final_clip.duration)
     final_clip = final_clip.set_audio(audio_clip)
 
